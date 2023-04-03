@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
       <div className="flex flex-row m-2">
         <div className="flex-row w-1/4"><Sidebar /></div>
-        <div className="flex-row w-3/4 "><MenuManagementComponent /></div>
+        <div className="flex-row w-3/4 "><Dashboard /></div>
 
       </div>
     </>
