@@ -1,3 +1,4 @@
+import { trpc } from '@/utils/trpc'
 import React, { useEffect, useState } from 'react'
 interface menu {
     plate: string
@@ -5,30 +6,17 @@ interface menu {
     price: string
 }
 export default function MenuManagementComponent() {
-
+    const menu = trpc.menu.getAll.useQuery()
+    const createMenu = trpc.menu.addRecord.useMutation({
+        onSuccess: () => menu.refetch()
+    })
     const [formData, setFormData] = useState({
         plate: "",
         ingredients: "",
         price: "",
     })
-    const [menu, setMenu] = useState<Array<menu>>([])
-
-    useEffect(() => {
-        fetch('api/menu')
-            .then(res => res.json())
-            .then(data => setMenu(data))
-    }, [])
     const handleSubmit = async () => {
-        const response = await fetch(
-            `/api/menu`,
-            {
-                method: 'POST',
-                headers: { "Content-type": "application/json" },
-                body: JSON.stringify(formData)
-            }
-        );
-        const res = await response.json()
-        console.log(res)
+        createMenu.mutate(formData)
     }
     return (
         <div className='flex flex-col gap-4'>
@@ -108,8 +96,8 @@ export default function MenuManagementComponent() {
                         </tr>
                     </thead>
                     <tbody>
-                        {menu.map((el, key) =>
-                            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                        {menu.data?.map((el, key) =>
+                            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700" key={key}>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {el.plate}
                                 </th>
