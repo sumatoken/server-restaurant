@@ -1,6 +1,6 @@
 import { procedure, router } from "../trpc";
 
-export const ordersRouter = router({
+export const tablesRouter = router({
     getAllOrders: procedure
     .query( async () => {
         const orders = await prisma?.tabla.findMany({
