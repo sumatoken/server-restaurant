@@ -11,17 +11,29 @@ export default async function handler(
         if (req.body.intent === "getMenu") {
             const menu = await prisma.menu.findMany()
             res.status(200).json(menu)
-        }else if (req.body.intent === "placeOrder") {
-            const orders = await prisma.tabla.create({
+        } else if (req.body.intent === "placeOrder") {
+            const order = JSON.parse(req.body.order)
+            const orders = await prisma.tabla.update({
                 data: {
                     orders: {
                         create: [
-                            { plate: req.body.orderName },
+                            {
+                                plate: order.plate,
+                            }
                         ]
                     }
+                },
+                where: {
+                    id: order.table
                 }
+
             })
+            console.log(JSON.parse(req.body.order))
             res.status(200).json(orders)
         }
-    }
+        
+    } else if (req.method === "GET") {
+            const menu = await prisma.menu.findMany()
+            res.status(200).json(menu)
+        }
 }
