@@ -33,7 +33,11 @@ export default async function handler(
         }
         
     } else if (req.method === "GET") {
-            const menu = await prisma.menu.findMany()
+            const menu = await prisma.menu.findMany({
+                select: {
+                    plate: true,
+                }
+            })
             res.status(200).json(menu)
         }
 }

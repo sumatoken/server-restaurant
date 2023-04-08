@@ -8,7 +8,10 @@ interface menu {
 export default function MenuManagementComponent() {
     const menu = trpc.menu.getAll.useQuery()
     const createMenu = trpc.menu.addRecord.useMutation({
-        onSuccess: () => menu.refetch()
+        onSuccess: () => {
+            menu.refetch();
+            setFormData({ plate: "", ingredients: "", price: "" });
+        }
     })
     const [formData, setFormData] = useState({
         plate: "",
