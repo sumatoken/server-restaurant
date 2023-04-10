@@ -11,6 +11,9 @@ export default function MenuManagementComponent() {
         onSuccess: () => {
             menu.refetch();
             setFormData({ plate: "", ingredients: "", price: "" });
+        },
+        onMutate: () => {
+            console.log("mute")
         }
     })
     const [formData, setFormData] = useState({
@@ -20,6 +23,7 @@ export default function MenuManagementComponent() {
     })
     const handleSubmit = async () => {
         createMenu.mutate(formData)
+        console.log(formData)
     }
     return (
         <div className='flex flex-col gap-4'>

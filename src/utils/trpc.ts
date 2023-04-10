@@ -24,6 +24,18 @@ export let token: string;
 export const trpc = createTRPCNext<AppRouter>({
   config({ ctx }) {
     return {
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            networkMode:
+              process.env.NODE_ENV === "development" ? "always" : "online",
+          },
+          mutations: {
+ 		        networkMode:
+            process.env.NODE_ENV === "development" ? "always" : "online",
+          },
+        },
+      },
       links: [
         httpBatchLink({
           /**
@@ -31,13 +43,13 @@ export const trpc = createTRPCNext<AppRouter>({
            * @link https://trpc.io/docs/ssr
            **/
           url: `${getBaseUrl()}/api/trpc`,
-
           // You can pass any HTTP headers you wish here
           async headers() {
             return {
               authorization: token,
             };
           },
+  
         }),
       ],
     };
@@ -45,5 +57,5 @@ export const trpc = createTRPCNext<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    **/
-  ssr: false,
+  ssr: true,
 });
