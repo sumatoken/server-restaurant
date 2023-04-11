@@ -12,24 +12,23 @@ export default async function handler(
             const menu = await prisma.menu.findMany()
             res.status(200).json(menu)
         } else if (req.body.intent === "placeOrder") {
-            const order = JSON.parse(req.body.order)
             const orders = await prisma.tabla.update({
                 data: {
                     orders: {
                         create: [
                             {
-                                plate: order.plate,
+                                plate: req.body.order,
                             }
                         ]
                     }
                 },
                 where: {
-                    id: order.table
+                    id: 1
                 }
 
             })
-            console.log(JSON.parse(req.body.order))
-            res.status(200).json(orders)
+            console.log("loggin incoming order", req.body.order)
+            res.status(200).json(req.body)
         }
         
     } else if (req.method === "GET") {
