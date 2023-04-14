@@ -12,6 +12,10 @@ export default async function handler(
             const menu = await prisma.menu.findMany()
             res.status(200).json(menu)
         } else if (req.body.intent === "placeOrder") {
+            if (req.body.order === "null") {
+                res.status(200).json({ message: "no order" })
+                return;
+            }
             const orders = await prisma.tabla.update({
                 data: {
                     orders: {
