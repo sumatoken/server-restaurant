@@ -9,10 +9,15 @@ export default async function handler(
 ) {
     if (req.method === "POST") {
         if (req.body.intent === "getMenu") {
-            const menu = await prisma.menu.findMany()
+            const menu = await prisma.menu.findMany({
+		        select: {
+		        plate: true,
+		        price: true
+		}
+	    })
             res.status(200).json(menu)
         } else if (req.body.intent === "placeOrder") {
-            if (req.body.order === "null") {
+/*             if (req.body.order === "null") {
                 res.status(200).json({ message: "no order" })
                 return;
             }
@@ -30,8 +35,8 @@ export default async function handler(
                     id: 1
                 }
 
-            })
-            console.log("loggin incoming order", req.body.order)
+            }) */
+            console.log("loggin incoming order", JSON.parse(req.body.order).item)
             res.status(200).json(req.body)
         }
         
@@ -39,6 +44,7 @@ export default async function handler(
             const menu = await prisma.menu.findMany({
                 select: {
                     plate: true,
+                    price: true
                 }
             })
             res.status(200).json(menu)
