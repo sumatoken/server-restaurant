@@ -3,6 +3,11 @@ import { procedure, router } from "../trpc";
 import { prisma } from "@/lib/prisma";
 export const tablesRouter = router({
     getAllOrders: procedure
+    .input(
+        z.object({
+            default: z.boolean().optional()
+        })
+    )
     .query( async () => {
         const orders = await prisma.tabla.findMany({
             include: {

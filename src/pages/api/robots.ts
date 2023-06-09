@@ -17,26 +17,32 @@ export default async function handler(
 	    })
             res.status(200).json(menu)
         } else if (req.body.intent === "placeOrder") {
-/*             if (req.body.order === "null") {
+            if (req.body.order === "null") {
                 res.status(200).json({ message: "no order" })
                 return;
             }
-            const orders = await prisma.tabla.update({
-                data: {
+            const incomingOrder = JSON.parse(req.body.order)
+
+            const order = await prisma.tabla.upsert({
+                where: {
+                    id: Number(incomingOrder.table)
+                },
+                update: {
                     orders: {
-                        create: [
-                            {
-                                plate: req.body.order,
-                            }
-                        ]
+                        create: {
+                            plate: incomingOrder.item,   
+                        },
                     }
                 },
-                where: {
-                    id: 1
+                create: {
+                    orders: {
+                        create: {
+                            plate: incomingOrder.item,   
+                        },
+                    }
                 }
-
-            }) */
-            console.log("loggin incoming order", JSON.parse(req.body.order).item)
+            })
+            console.log("loggin incoming order", incomingOrder.item, incomingOrder.table)
             res.status(200).json(req.body)
         }
         
